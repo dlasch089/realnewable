@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { EnergydataService } from '../../services/energydata.service';
 
 @Component({
   selector: 'app-results',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
+  results = {};
 
-  constructor() { }
+  constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
+    this.results = this.energyDataService.getData();
   }
 
 }
