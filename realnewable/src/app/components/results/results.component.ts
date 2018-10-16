@@ -8,11 +8,12 @@ import { EnergydataService } from '../../services/energydata.service';
 })
 export class ResultsComponent implements OnInit {
   results = {};
+  resultsSmard = {};
 
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
-    this.results = this.energyDataService.getData();
+    this.results = this.energyDataService.getData();  
+    this.resultsSmard = this.energyDataService.getDataSmard();
   }
-
 }
