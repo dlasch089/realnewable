@@ -36,7 +36,7 @@ export class ResultsComponent implements OnInit {
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
-    this.results = this.energyDataService.getData();  
+    // this.results = this.energyDataService.getData();  
     this.getPrognosis(this.prognosisCat);
   }
 
