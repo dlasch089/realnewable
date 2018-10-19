@@ -12,7 +12,7 @@ export class EnergydataService {
 // Get Data from entsoe-api
 // To-Do: either https localhost or deploy for testing on heroku with https (needed: dot.env for security token)
    getData(){
-     return this.http.get('https://transparency.entsoe.eu/api?securityToken=e5d0f33d-271c-42f2-9c33-f398078bdb5b&documentType=A69&processType=A01&psrType=B16&in_Domain=10YDE-EON------1&periodStart=201810150000&periodEnd=201910150000')
+     return this.http.get('https://transparency.entsoe.eu/api?securityToken=MY_TOKEN_&documentType=A69&processType=A01&psrType=B16&in_Domain=10YDE-EON------1&periodStart=201810150000&periodEnd=201910150000')
       .subscribe(data => {
         console.log(data)
       },
