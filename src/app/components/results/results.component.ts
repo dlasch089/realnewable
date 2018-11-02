@@ -36,10 +36,24 @@ export class ResultsComponent implements OnInit {
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
-    this.results = this.energyDataService.getData();  
+    this.energyDataService.getData()
+      .subscribe(data => {
+      console.log('logs:', data);
+      return this.results = data;
+      });
+
+
+    /*
+    ONLY NEEDED FOR SMARD-FETCH
+
     this.getPrognosis(this.prognosisCat);
+    */
   }
 
+
+  /*
+
+  ONLY NEEDED FOR SMARD-FETCH
   // Finding the date of last sunday for the SMARD-Platform
   getLastSunday(date) {
     if(date.getDay() != 0){
@@ -61,5 +75,5 @@ export class ResultsComponent implements OnInit {
       };
       console.log('Here are the winners:', this.resultsSmard);
     }
-
+  */
 }
