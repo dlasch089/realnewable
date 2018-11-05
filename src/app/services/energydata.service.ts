@@ -11,13 +11,10 @@ export class EnergydataService {
 
 // Get Data from entsoe-api
 // To-Do: either https localhost or deploy for testing on heroku with https (needed: dot.env for security token)
-   getData(){
-     return this.http.get('http://localhost:3000/forecast/total-generation/germany')
-      // .subscribe(data => {
-      //   console.log(data);
-      //   return data;
-      // },
-      // error => console.log("Error: " + error.message));
+   getData(generationType, area){
+    //  valid inputs for generationType: total-generation, solar, wind-offshore, wind-onshore
+    // valid inputs for area: germany, tennet, transnet, amprion, hertz
+     return this.http.get('http://localhost:3000/forecast/'+ generationType + '/' + area);
    }
 
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EnergydataService } from '../../services/energydata.service';
+import { TestComponentRenderer } from '@angular/core/testing';
 
 @Component({
   selector: 'app-results',
@@ -33,14 +34,26 @@ export class ResultsComponent implements OnInit {
     pv: 125,
   };
 
+  areaCodes = {
+    ger: 'germany',
+    ten: 'tennet',
+    tra: 'transnet',
+    amp: 'amprion',
+    her: 'hertz'
+  }
+
+  generationTypes = {
+    tot: 'total-generation',
+    sol: 'solar',
+    wof: 'wind-offshore',
+    won: 'wind-onshore'
+
+  }
+
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
-    this.energyDataService.getData()
-      .subscribe(data => {
-      console.log('logs:', data);
-      return this.results = data;
-      });
+    this.calculateOptimum(this.areaCodes.ger);
 
 
     /*
@@ -49,6 +62,31 @@ export class ResultsComponent implements OnInit {
     this.getPrognosis(this.prognosisCat);
     */
   }
+
+  // get the data for all generationtypes and save the results in one array
+  async calculateOptimum(areaCode){
+    for (let key in this.generationTypes){
+      this.energyDataService.getData(this.generationTypes[key], areaCode )
+      .subscribe(data => {
+      console.log('logs:', data);
+      return this.results[key] = data;
+      });
+    }
+  }
+
+  // To-Do: (idea: only get 24 element-arrays --> backend)
+  // getRenewableShare(object:Object) {
+  //   let renewableArray:Array<Number> = [];
+  //   let totalArray:Array<Number> = [];
+  //   if(object.documentType === 'A69'){
+  //     for(let i = 0; i < object.result.length; i += 4) {
+  //       renewableArray[i] += object.result[i];
+  //     }
+  //     } else {
+
+  //     }
+  //   }
+  // }
 
 
   /*
