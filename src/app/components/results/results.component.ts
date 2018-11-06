@@ -1,6 +1,13 @@
+'use strict';
+
 import { Component, OnInit } from '@angular/core';
 import { EnergydataService } from '../../services/energydata.service';
 import { TestComponentRenderer } from '@angular/core/testing';
+
+import { Observable } from 'rxjs';
+
+import { Result } from '../../models/result';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-results',
@@ -8,32 +15,16 @@ import { TestComponentRenderer } from '@angular/core/testing';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
-  results = {};
-  resultsSmard:Object = {};
-
-  generationCat = {
-    bio: 103, 
-    water: 1226, 
-    windOffshore: 1225, 
-    windOnshore: 100, 
-    pv: 102, 
-    otherRenewables: 1228, 
-    nuclear: 1224, 
-    brownCoal: 1223, 
-    hardCoal: 111, 
-    naturalGas: 112, 
-    pumpedStorage: 113, 
-    others: 1227,
+  results:Result = {
+    won:Object,
+    tot:Object,
+    sol:Object,
+    wof:Object
   };
 
-  prognosisCat = {
-    all: 122,
-    others: 715,
-    windOffshore: 3791,
-    windOnshore: 123,
-    pv: 125,
-  };
-
+  renewableArray:Array<Number> = [];
+  totalArray:Array<Number> = [];
+  
   areaCodes = {
     ger: 'germany',
     ten: 'tennet',
@@ -41,57 +32,89 @@ export class ResultsComponent implements OnInit {
     amp: 'amprion',
     her: 'hertz'
   }
-
+  
   generationTypes = {
     tot: 'total-generation',
     sol: 'solar',
     wof: 'wind-offshore',
     won: 'wind-onshore'
-
   }
-
+  
   constructor(private energyDataService: EnergydataService) { }
-
+  
   ngOnInit() {
-    this.calculateOptimum(this.areaCodes.ger);
-
-
-    /*
-    ONLY NEEDED FOR SMARD-FETCH
-
-    this.getPrognosis(this.prognosisCat);
-    */
+    this.calculateOptimum(this.areaCodes.ger)
+    .then(results => {
+      this.getRenewableShare(results)
+    });
+    
   }
-
-  // get the data for all generationtypes and save the results in one array
+  
+  // get the data for all generationtypes and save the results in one object
   async calculateOptimum(areaCode){
     for (let key in this.generationTypes){
-      this.energyDataService.getData(this.generationTypes[key], areaCode )
-      .subscribe(data => {
-      console.log('logs:', data);
-      return this.results[key] = data;
-      });
-    }
+      await this.energyDataService.getData(this.generationTypes[key], areaCode )
+      // transform to promise, as observables are not waiting for return
+        .toPromise()
+        .then(data => {
+          return this.results[key] = data;
+        });
+      }
+    return this.results;
   }
+  
+  // create array of summed values for renewables and the array for total generation
+  getRenewableShare(object:Result) {
+      for(let key in object) {
+        // validation of the data from the api
+        if(object[key].documentType === 'A69' && this.renewableArray.length === 0){
+          this.renewableArray = object[key].result;
+        } else if(object[key].documentType === 'A69' && this.renewableArray.length > 0) {
+          // adding values to the existing array for renewables
+          this.renewableArray = this.renewableArray.map((num, idx) => {
+            return num + object[key].result[idx];
+          });
+        } else if (object[key].documentType === 'A71') {
+          this.totalArray = object[key].result
+        };
+      }
+      console.log(this.renewableArray, this.totalArray);
+      return this.renewableArray, this.totalArray;
+    }
+          
+          
+          /*
+          ONLY NEEDED FOR SMARD-FETCH
+          resultsSmard:Object = {};
+          
+          this.getPrognosis(this.prognosisCat);
+          
+          
+          generationCat = {
+            bio: 103, 
+            water: 1226, 
+            windOffshore: 1225, 
+            windOnshore: 100, 
+            pv: 102, 
+            otherRenewables: 1228, 
+            nuclear: 1224, 
+            brownCoal: 1223, 
+            hardCoal: 111, 
+            naturalGas: 112, 
+            pumpedStorage: 113, 
+            others: 1227,
+          };
+          
+          prognosisCat = {
+            all: 122,
+            others: 715,
+            windOffshore: 3791,
+            windOnshore: 123,
+            pv: 125,
+  };
 
-  // To-Do: (idea: only get 24 element-arrays --> backend)
-  // getRenewableShare(object:Object) {
-  //   let renewableArray:Array<Number> = [];
-  //   let totalArray:Array<Number> = [];
-  //   if(object.documentType === 'A69'){
-  //     for(let i = 0; i < object.result.length; i += 4) {
-  //       renewableArray[i] += object.result[i];
-  //     }
-  //     } else {
-
-  //     }
-  //   }
-  // }
 
 
-  /*
-
-  ONLY NEEDED FOR SMARD-FETCH
   // Finding the date of last sunday for the SMARD-Platform
   getLastSunday(date) {
     if(date.getDay() != 0){
