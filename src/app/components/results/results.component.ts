@@ -24,6 +24,12 @@ export class ResultsComponent implements OnInit {
 
   renewableArray:Array<Number> = [];
   totalArray:Array<Number> = [];
+
+  shareArray:Array<Number> = [];
+  sortedShareArray:Array<Number>;
+  sharePositions:Array<Number> = [];
+
+  optimalTime:Number;
   
   areaCodes = {
     ger: 'germany',
@@ -44,10 +50,9 @@ export class ResultsComponent implements OnInit {
   
   ngOnInit() {
     this.calculateOptimum(this.areaCodes.ger)
-    .then(results => {
-      this.getRenewableShare(results)
-    });
-    
+    .then(results => this.getRenewableShare(results))
+    .then(() => this.calculateShare(this.renewableArray, this.totalArray))
+    .then(shares => this.findOptimum(shares))
   }
   
   // get the data for all generationtypes and save the results in one object
@@ -65,7 +70,7 @@ export class ResultsComponent implements OnInit {
   
   // create array of summed values for renewables and the array for total generation
   getRenewableShare(object:Result) {
-      for(let key in object) {
+  for(let key in object) {
         // validation of the data from the api
         if(object[key].documentType === 'A69' && this.renewableArray.length === 0){
           this.renewableArray = object[key].result;
@@ -78,8 +83,32 @@ export class ResultsComponent implements OnInit {
           this.totalArray = object[key].result
         };
       }
-      console.log(this.renewableArray, this.totalArray);
-      return this.renewableArray, this.totalArray;
+    }
+
+    calculateShare(renArray, totArray) {
+      this.shareArray = totArray.map((el, idx) => {
+        // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
+        return renArray[idx*4] / el;
+      })
+      return this.shareArray;
+    }
+
+    findOptimum(shaArray) {
+      // not used:
+      // let largest = Math.max.apply(Math, shaArray);
+      // let largestPosition = shaArray.indexOf(largest);
+      // this.optimalTime = new Date().setHours(largestPosition);
+
+      // populate array from sharesArray to sort it descending
+      this.sortedShareArray = shaArray.slice();
+      this.sortedShareArray.sort((a:number, b:number) => {return b-a});
+
+      // find the indexes of the sorted values in the original array
+      for(let i = 0; i< this.sortedShareArray.length; i++){
+        this.sharePositions.push(shaArray.indexOf(this.sortedShareArray[i]));
+      }
+      // saves hours with the highest shares during the day in a descending order
+      return this.sharePositions;
     }
           
           

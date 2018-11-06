@@ -2,4 +2,9 @@
   results works!
 </p>
 
-<pre *ngIf="results">Prognosis: {{ results | json }} </pre>
+<pre *ngIf="sharePositions.length > 0">The optimal time for energy consumption today is: {{sharePositions[0]}} o'clock;
+  After that it is: {{sharePositions[1]}} o'clock
+  After that it is: {{sharePositions[2]}} o'clock
+  After that it is: {{sharePositions[3]}} o'clock
+  After that it is: {{sharePositions[4]}} o'clock
+</pre>
