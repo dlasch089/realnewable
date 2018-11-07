@@ -2,9 +2,8 @@
   results works!
 </p>
 
-<pre *ngIf="sharePositions.length > 0">The optimal time for energy consumption today is: {{sharePositions[0]}} o'clock;
-  After that it is: {{sharePositions[1]}} o'clock
-  After that it is: {{sharePositions[2]}} o'clock
-  After that it is: {{sharePositions[3]}} o'clock
-  After that it is: {{sharePositions[4]}} o'clock
-</pre>
+<div *ngIf="sharePositions.length > 0">
+  <p>Ranking of the share-heights:</p><pre>({{results.tot.message | json}})</pre>
+    <p *ngFor="let forecast of sharePositions; index as i">{{i}}. Time: {{forecast}} o'clock</p>
+    <p *ngFor="let share of shareArray; index as i">Time: {{i}} o'clock | Share: {{share*100}}%</p>
+</div>
