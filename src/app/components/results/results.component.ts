@@ -47,8 +47,8 @@ export class ResultsComponent implements OnInit {
   }
 
   // Hourly share of Biomass in percentage; Position 0 = 0 am!
-  pumpedHydroShare:Array<number> = [0.0048, 0.0037, 0.0027, 0.0023, 0.0027, 0.0022, 0.0019, 0.0017, 0.0019, 0.0017, 0.0016, 0.0015, 0.0015, 0.0015, 0.0015, 0.0014, 0.0014, 0.0014, 0.0015, 0.0015, 0.0016, 0.0015, 0.0018, 0.0029, 0.0033, 0.0066, 0.0136, 0.0202, 0.0191, 0.0247, 0.0271, 0.0298, 0.0337, 0.0328, 0.0307, 0.0263, 0.0280, 0.0246, 0.0223, 0.0187, 0.0195, 0.0157, 0.0139, 0.0120, 0.0128, 0.0123, 0.0118, 0.0097, 0.0104, 0.0074, 0.0075, 0.0062, 0.0076, 0.0066, 0.0061, 0.0046, 0.0054, 0.0061, 0.0067, 0.0068, 0.0066, 0.0072, 0.0084, 0.0088, 0.0074, 0.0089, 0.0128, 0.0178, 0.0149, 0.0214, 0.0256, 0.0316, 0.0245, 0.0267, 0.0333, 0.0381, 0.0368, 0.0354, 0.0348, 0.0333, 0.0373, 0.0303, 0.0251, 0.0210, 0.0246, 0.0206, 0.0157, 0.0121, 0.0213, 0.0161, 0.0113, 0.0075, 0.0108, 0.0067, 0.0049, 0.0036];
-  
+  pumpedHydroShare:Array<number> = [0.0034, 0.0021, 0.0017, 0.0015, 0.0014, 0.0019, 0.0109, 0.0252, 0.0309, 0.0234, 0.0153, 0.0117, 0.0079, 0.0062, 0.0063, 0.0078, 0.0117, 0.0234, 0.0306, 0.0351, 0.0284, 0.0183, 0.0140, 0.0065]
+ 
   // Average of hourly generation of water, biomass and other renewable sources
   otherRenewables:number = 1778 + 4568 + 141;
 
@@ -95,7 +95,7 @@ export class ResultsComponent implements OnInit {
       this.shareArray = totArray.map((el, idx) => {
         // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
         // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
-        return ((renArray[idx*4] + this.otherRenewables)  / el) + this.pumpedHydroShare[idx*4];
+        return ((renArray[idx*4] + this.otherRenewables)  / el) + this.pumpedHydroShare[idx];
       })
       // To-Do: Add the other renewable sources as fixed values (water: 1780, Bio: 4568, Other: 140, Pumped-Hydro: pumpedHydroShare --> hourly)
       return this.shareArray;
