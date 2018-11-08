@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { environment } from '../../environments/environment';
+
+const apiUrl = environment.apiUrl;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -14,7 +18,7 @@ export class EnergydataService {
    getData(generationType, area){
     //  valid inputs for generationType: total-generation, solar, wind-offshore, wind-onshore
     // valid inputs for area: germany, tennet, transnet, amprion, hertz
-     return this.http.get('http://localhost:3000/forecast/'+ generationType + '/' + area);
+     return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + area);
    }
 
 
