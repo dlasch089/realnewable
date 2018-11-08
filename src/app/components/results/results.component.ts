@@ -45,7 +45,13 @@ export class ResultsComponent implements OnInit {
     wof: 'wind-offshore',
     won: 'wind-onshore'
   }
+
+  // Hourly share of Biomass in percentage; Position 0 = 0 am!
+  pumpedHydroShare:Array<number> = [1.0048, 1.0037, 1.0027, 1.0023, 1.0027, 1.0022, 1.0019, 1.0017, 1.0019, 1.0017, 1.0016, 1.0015, 1.0015, 1.0015, 1.0015, 1.0014, 1.0014, 1.0014, 1.0015, 1.0015, 1.0016, 1.0015, 1.0018, 1.0029, 1.0033, 1.0066, 1.0136, 1.0202, 1.0191, 1.0247, 1.0271, 1.0298, 1.0337, 1.0328, 1.0307, 1.0263, 1.0280, 1.0246, 1.0223, 1.0187, 1.0195, 1.0157, 1.0139, 1.0120, 1.0128, 1.0123, 1.0118, 1.0097, 1.0104, 1.0074, 1.0075, 1.0062, 1.0076, 1.0066, 1.0061, 1.0046, 1.0054, 1.0061, 1.0067, 1.0068, 1.0066, 1.0072, 1.0084, 1.0088, 1.0074, 1.0089, 1.0128, 1.0178, 1.0149, 1.0214, 1.0256, 1.0316, 1.0245, 1.0267, 1.0333, 1.0381, 1.0368, 1.0354, 1.0348, 1.0333, 1.0373, 1.0303, 1.0251, 1.0210, 1.0246, 1.0206, 1.0157, 1.0121, 1.0213, 1.0161, 1.0113, 1.0075, 1.0108, 1.0067, 1.0049, 1.0036];
   
+  // Average of hourly generation of water, biomass and other renewable sources
+  otherRenewables:number = 1778 + 4568 + 141;
+
   constructor(private energyDataService: EnergydataService) { }
   
   ngOnInit() {
@@ -88,8 +94,10 @@ export class ResultsComponent implements OnInit {
     calculateShare(renArray, totArray) {
       this.shareArray = totArray.map((el, idx) => {
         // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
-        return renArray[idx*4] / el;
+        // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
+        return (renArray[idx*4]*this.pumpedHydroShare[idx*4] + this.otherRenewables)  / el;
       })
+      // To-Do: Add the other renewable sources as fixed values (water: 1780, Bio: 4568, Other: 140, Pumped-Hydro: pumpedHydroShare --> hourly)
       return this.shareArray;
     }
 
