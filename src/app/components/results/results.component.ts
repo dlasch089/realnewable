@@ -55,7 +55,7 @@ export class ResultsComponent implements OnInit {
   constructor(private energyDataService: EnergydataService) { }
   
   ngOnInit() {
-    this.calculateOptimum(this.areaCodes.ger)
+    this.calculateOptimum(this.areaCodes.ten)
     .then(results => this.getRenewableShare(results))
     .then(() => this.calculateShare(this.renewableArray, this.totalArray))
     .then(shares => this.findOptimum(shares))
@@ -95,17 +95,13 @@ export class ResultsComponent implements OnInit {
       this.shareArray = totArray.map((el, idx) => {
         // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
         // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
-        return ((renArray[idx*4] + this.otherRenewables)  / el) + this.pumpedHydroShare[idx];
+        return ((renArray[idx*4])  / el) + this.pumpedHydroShare[idx];
       })
       // To-Do: Add the other renewable sources as fixed values (water: 1780, Bio: 4568, Other: 140, Pumped-Hydro: pumpedHydroShare --> hourly)
       return this.shareArray;
     }
 
     findOptimum(shaArray) {
-      // not used:
-      // let largest = Math.max.apply(Math, shaArray);
-      // let largestPosition = shaArray.indexOf(largest);
-      // this.optimalTime = new Date().setHours(largestPosition);
 
       // populate array from sharesArray to sort it descending
       this.sortedShareArray = shaArray.slice();
