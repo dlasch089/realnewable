@@ -11,17 +11,23 @@ const apiUrl = environment.apiUrl;
 })
 export class EnergydataService {
 
+  // Globally available variables - here: Default
+  selectedDevice:String = 'Any';
+  selectedState:String = 'Germany';
+
   constructor(private http: HttpClient) {}
 
 // Get Data from entsoe-api
-// To-Do: either https localhost or deploy for testing on heroku with https (needed: dot.env for security token)
    getData(generationType, area){
     //  valid inputs for generationType: total-generation, solar, wind-offshore, wind-onshore
     // valid inputs for area: germany, tennet, transnet, amprion, hertz
      return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + area);
    }
 
-
+   setGlobalVar(device, state) {
+    this.selectedDevice = device;
+    this.selectedState = state;
+   }
 
 
   //  Data from "Bundesnetzagentur | SMARD.de" under § 111d EnWG licence

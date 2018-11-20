@@ -23,6 +23,7 @@ export class UserInputComponent implements OnInit {
   }
 
   handleSubmit(){
-    console.log('Hi' + 'Selected State and Device: ' + this.selectedState + ' ' + this.selectedDevice);
+    this.energyDataService.setGlobalVar(this.selectedState, this.selectedDevice);
+    console.log('Selected State and Device: ' + this.selectedState + ' ' + this.selectedDevice);
   }
 }

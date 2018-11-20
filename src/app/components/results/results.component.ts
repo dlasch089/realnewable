@@ -11,6 +11,9 @@ import { Result } from '../../models/result';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
+  selectedDevice:String = 'Nothing Selected';
+  selectedState:String = 'Nothing Selected';
+
   results:Result = {
     won:Object,
     tot:Object,
@@ -51,6 +54,9 @@ export class ResultsComponent implements OnInit {
   constructor(private energyDataService: EnergydataService) { }
   
   ngOnInit() {
+    this.selectedDevice = this.energyDataService.selectedDevice;
+    this.selectedState = this.energyDataService.selectedState;
+
     this.calculateOptimum(this.areaCodes.ten)
     .then(results => this.getRenewableShare(results))
     .then(() => this.calculateShare(this.renewableArray, this.totalArray))
