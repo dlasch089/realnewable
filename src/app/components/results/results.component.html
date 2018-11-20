@@ -1,10 +1,6 @@
-<p>
-  results works!
-</p>
-
 <div *ngIf="sharePositions.length > 0">
   <h2>Ranking of highest share of renewable generation in germany:</h2><pre>({{results.tot.message | json}})</pre>
-    <p *ngFor="let forecast of sharePositions; index as i">{{i+1}}. Time: {{forecast}} <span *ngIf="i <= 11">am</span><span *ngIf="i > 11">pm</span> </p>
+    <p *ngFor="let forecast of sharePositions; index as i">{{i+1}}. Time: {{forecast}}</p>
     <!-- Decimalpipe for showing only the percentages -->
     <h2>Overview of shares</h2>
     <p *ngFor="let share of shareArray; index as i">Share at {{i}} <span *ngIf="i <= 11">am</span><span *ngIf="i > 11">pm</span>  is:  {{share*100 | number:'1.0-0'}}%</p>

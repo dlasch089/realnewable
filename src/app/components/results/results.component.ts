@@ -2,12 +2,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { EnergydataService } from '../../services/energydata.service';
-import { TestComponentRenderer } from '@angular/core/testing';
-
-import { Observable } from 'rxjs';
 
 import { Result } from '../../models/result';
-import { from } from 'rxjs';
 
 @Component({
   selector: 'app-results',

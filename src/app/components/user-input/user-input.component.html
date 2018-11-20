@@ -1,3 +1,19 @@
-<p>
-  user-input works!
-</p>
+ <div class="container">
+    <h4>Select Location</h4>
+   <mat-select placeholder="Germany">
+     <mat-option *ngFor="let state of states" [value]="state">
+       {{state}}
+     </mat-option>
+   </mat-select>
+   
+   <h4>Select Device</h4>
+   <mat-select placeholder="Any">
+       <mat-option *ngFor="let device of devices" [value]="device">
+         {{device}}
+       </mat-option>
+     </mat-select>
+     <button (click)="handleSubmit()" class="button-submit">
+       find perfect timing
+     </button>
+ </div>
+

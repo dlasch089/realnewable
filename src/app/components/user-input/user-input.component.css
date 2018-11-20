@@ -1,0 +1,12 @@
+.container {
+  margin: 5%
+}
+
+.button-submit {
+  color:black;
+  background-color: white;
+  border-width: 1px;
+  border-color: black;
+  margin-top: 10%;
+  padding: 2%;
+}

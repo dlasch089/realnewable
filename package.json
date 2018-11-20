@@ -13,6 +13,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^6.1.0",
+    "@angular/cdk": "~7.0.4",
     "@angular/cli": "~6.2.5",
     "@angular/common": "^6.1.0",
     "@angular/compiler": "^6.1.0",
@@ -20,12 +21,15 @@
     "@angular/core": "^6.1.0",
     "@angular/forms": "^6.1.0",
     "@angular/http": "^6.1.0",
+    "@angular/material": "^7.0.4",
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "core-js": "^2.5.4",
     "express": "^4.16.4",
+    "hammerjs": "^2.0.8",
     "path": "^0.12.7",
+    "roboto-fontface": "^0.10.0",
     "rxjs": "^6.2.2",
     "typescript": "~2.9.2",
     "zone.js": "~0.8.26"
