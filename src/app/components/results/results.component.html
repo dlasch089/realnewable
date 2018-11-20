@@ -1,6 +1,7 @@
-<p>
-  You selected: {{selectedDevice}} and {{selectedState}}
-</p>
+<h2 *ngIf="sharePositions.length > 0">
+  The perfect time for energy consumption today is: {{sharePositions[0]}} o'clock
+</h2>
+<p>You selected: {{selectedDevice}} and {{selectedState}}</p>
 <div *ngIf="sharePositions.length > 0">
   <h4>Ranking of highest share of renewable generation in germany:</h4><pre>({{results.tot.message | json}})</pre>
     <p *ngFor="let forecast of sharePositions; index as i">{{i+1}}. Time: {{forecast}}</p>
