@@ -5,6 +5,8 @@ import { EnergydataService } from '../../services/energydata.service';
 
 import { Result } from '../../models/result';
 
+import {MatExpansionModule} from '@angular/material/expansion';
+
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
@@ -13,6 +15,7 @@ import { Result } from '../../models/result';
 export class ResultsComponent implements OnInit {
   selectedDevice:string = 'Nothing Selected';
   selectedState:string = 'Nothing Selected';
+  selectedOperator:string = 'Nothing Selected';
 
   results:Result = {
     won:Object,
@@ -58,7 +61,6 @@ export class ResultsComponent implements OnInit {
   ngOnInit() {
     this.selectedDevice = this.energyDataService.selectedDevice;
     this.selectedState = this.energyDataService.selectedState;
-
     
     this.calculateOptimum(this.findOperator())
     .then(results => this.getRenewableShare(results))
@@ -69,7 +71,7 @@ export class ResultsComponent implements OnInit {
   findOperator(){
     for(let key in this.areaCodes) {
       if(this.areaCodes[key].indexOf(this.selectedState) >= 0){
-        console.log(key.toString());
+        this.selectedOperator = key;
         return key;
       } 
       else {

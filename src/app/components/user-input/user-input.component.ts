@@ -20,6 +20,9 @@ export class UserInputComponent implements OnInit {
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
+    // Sets the variables, if they were already chosen
+    this.selectedState = this.energyDataService.selectedState;
+    this.selectedDevice = this.energyDataService.selectedDevice;
   }
 
   handleSubmit(){
