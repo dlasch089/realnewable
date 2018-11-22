@@ -2,10 +2,10 @@
   <h2>
     The perfect time for energy consumption in {{selectedState}} today is: 
   </h2>
-  <h2 *ngIf="sharePositions.length > 0">
+  <h2 *ngIf="sharePositions.length > 0" class="optimum">
     {{sharePositions[0]}} o'clock
   </h2>
-  <mat-expansion-panel>
+  <mat-expansion-panel *ngIf="sharePositions.length > 0">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Show Results
