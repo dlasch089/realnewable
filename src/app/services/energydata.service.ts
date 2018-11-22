@@ -12,8 +12,8 @@ const apiUrl = environment.apiUrl;
 export class EnergydataService {
 
   // Globally available variables - here: Default
-  selectedDevice:String = 'Any';
-  selectedState:String = 'Germany';
+  selectedDevice:string = 'Any';
+  selectedState:string = 'Germany';
 
   constructor(private http: HttpClient) {}
 
@@ -24,7 +24,7 @@ export class EnergydataService {
      return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + area);
    }
 
-   setGlobalVar(device, state) {
+   setGlobalVar(state, device) {
     this.selectedDevice = device;
     this.selectedState = state;
    }

@@ -12,7 +12,7 @@ import { NONE_TYPE } from '@angular/compiler/src/output/output_ast';
 })
 export class UserInputComponent implements OnInit {
 
-  states:Array<String> = ['Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Mecklenburg-Vorpommern','Lower Saxony','North Rhine-Westphalia','Rheinland-Pfalz','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'];
+  states:Array<String> = ['Baden-Wuerttemberg', 'Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Mecklenburg-Vorpommern','Lower Saxony','North Rhine-Westphalia','Rheinland-Pfalz','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'];
   devices:Array<String> = ['Washing Machine', 'Dish Washer', 'Hair Dryer', 'Oven'];
   selectedState:String = 'Germany';
   selectedDevice:String = 'Any';

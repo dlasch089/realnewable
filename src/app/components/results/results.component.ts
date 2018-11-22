@@ -11,8 +11,8 @@ import { Result } from '../../models/result';
   styleUrls: ['./results.component.css']
 })
 export class ResultsComponent implements OnInit {
-  selectedDevice:String = 'Nothing Selected';
-  selectedState:String = 'Nothing Selected';
+  selectedDevice:string = 'Nothing Selected';
+  selectedState:string = 'Nothing Selected';
 
   results:Result = {
     won:Object,
@@ -31,11 +31,11 @@ export class ResultsComponent implements OnInit {
   optimalTime:Number;
   
   areaCodes = {
-    ger: 'germany',
-    ten: 'tennet',
-    tra: 'transnet',
-    amp: 'amprion',
-    her: 'hertz'
+    germany: ['Germany'],
+    tennet: ['Bavaria', 'Bremen', 'Hesse', 'Lower Saxony', 'Schleswig-Holstein'],
+    transnet:['Baden-Wuerttemberg'],
+    amprion: ['North Rhine-Westphalia', 'Rheinland-Pfalz','Saarland'],
+    hertz: ['Berlin','Brandenburg', 'Hamburg', 'Mecklenburg-Vorpommern', 'Saxony','Saxony-Anhalt','Thuringia']
   }
   
   generationTypes = {
@@ -44,6 +44,8 @@ export class ResultsComponent implements OnInit {
     wof: 'wind-offshore',
     won: 'wind-onshore'
   }
+
+  states:Array<String> = ['Baden-Wuerttemberg', 'Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Mecklenburg-Vorpommern','Lower Saxony','North Rhine-Westphalia','Rheinland-Pfalz','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'];
 
   // Hourly share of Biomass in percentage; Position 0 = 0 am!
   pumpedHydroShare:Array<number> = [0.0034, 0.0021, 0.0017, 0.0015, 0.0014, 0.0019, 0.0109, 0.0252, 0.0309, 0.0234, 0.0153, 0.0117, 0.0079, 0.0062, 0.0063, 0.0078, 0.0117, 0.0234, 0.0306, 0.0351, 0.0284, 0.0183, 0.0140, 0.0065]
@@ -57,10 +59,23 @@ export class ResultsComponent implements OnInit {
     this.selectedDevice = this.energyDataService.selectedDevice;
     this.selectedState = this.energyDataService.selectedState;
 
-    this.calculateOptimum(this.areaCodes.ten)
+    
+    this.calculateOptimum(this.findOperator())
     .then(results => this.getRenewableShare(results))
     .then(() => this.calculateShare(this.renewableArray, this.totalArray))
     .then(shares => this.findOptimum(shares))
+  }
+
+  findOperator(){
+    for(let key in this.areaCodes) {
+      if(this.areaCodes[key].indexOf(this.selectedState) >= 0){
+        console.log(key.toString());
+        return key;
+      } 
+      else {
+        console.log('State not found yet (Error if shown 5 times!)');
+      }
+    }
   }
   
   // get the data for all generationtypes and save the results in one object
