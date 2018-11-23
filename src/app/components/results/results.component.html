@@ -2,26 +2,19 @@
   <h2>
     The perfect time for energy consumption in {{selectedState}} today is: 
   </h2>
-  <h2 *ngIf="sharePositions.length > 0" class="optimum">
-    {{sharePositions[0]}} o'clock
+  <h2 *ngIf="optimumToday" class="optimum">
+    {{optimumToday}} o'clock
   </h2>
-  <mat-expansion-panel *ngIf="sharePositions.length > 0">
+  <mat-expansion-panel *ngIf="rankedShares.length > 0">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Show Results
         </mat-panel-title>
-        <mat-panel-description>
+        <!-- <mat-panel-description>
           Shares during the day
-        </mat-panel-description>
+        </mat-panel-description> -->
       </mat-expansion-panel-header>
       <p *ngFor="let share of shareArray; index as i">Share at {{i}} <span *ngIf="i <= 11">am</span><span *ngIf="i > 11">pm</span>  is:  {{share*100 | number:'1.0-0'}}%</p>
     </mat-expansion-panel>
-  <!-- <div *ngIf="sharePositions.length > 0">
-    <h4>Ranking of highest share of renewable generation in germany:</h4><pre>({{results.tot.message | json}})</pre>
-      <p *ngFor="let forecast of sharePositions; index as i">{{i+1}}. Time: {{forecast}}</p>
-      Decimalpipe for showing only the percentages
-       <h4>Overview of shares</h4>
-      <p *ngFor="let share of shareArray; index as i">Share at {{i}} <span *ngIf="i <= 11">am</span><span *ngIf="i > 11">pm</span>  is:  {{share*100 | number:'1.0-0'}}%</p>
-  </div> -->
 </div>
 
