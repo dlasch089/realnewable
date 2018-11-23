@@ -1,10 +1,11 @@
 <div class="container">
   <h2>
-    The perfect time for energy consumption in {{selectedState}} today is: 
+    Perfect time for energy consumption in {{selectedState}} today is: 
   </h2>
   <img *ngIf="!optimumToday" src="assets/solar battery-0.9s-200px.svg" />
   <h2 *ngIf="optimumToday" class="optimum">
-    {{optimumToday}} o'clock
+    <p *ngIf="optimumToday <= 12">{{optimumToday}} am</p>
+    <p *ngIf="optimumToday > 12">{{optimumToday - 12}} pm</p>
   </h2>
   <mat-expansion-panel *ngIf="rankedShares.length > 0">
       <mat-expansion-panel-header>
@@ -15,7 +16,12 @@
           Shares during the day
         </mat-panel-description> -->
       </mat-expansion-panel-header>
-      <p *ngFor="let share of shareArray; index as i">Share at {{i}} <span *ngIf="i <= 12">am</span><span *ngIf="i > 11">pm</span>  is:  {{share*100 | number:'1.0-0'}}%</p>
+      <p *ngFor="let share of shareArray; index as i">
+        Share at 
+          <span *ngIf="i <= 12">{{i}} am</span>
+          <span *ngIf="i > 12">{{i - 12}} pm</span>  
+        is:  {{share*100 | number:'1.0-0'}}%
+      </p>
     </mat-expansion-panel>
 </div>
 

@@ -164,7 +164,7 @@ export class ResultsComponent implements OnInit {
     let now = new Date().getHours();
     // Finds the first element bigger than the current hour
     this.optimumToday = rankedSharesArray.find(el => {
-        return el > now; 
+        return el >= now; 
     })
   }   
           /*
