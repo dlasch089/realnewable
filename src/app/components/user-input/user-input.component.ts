@@ -17,16 +17,25 @@ export class UserInputComponent implements OnInit {
   selectedState:String = 'Germany';
   selectedDevice:String = 'Any';
 
+  now:Number = 0;
+
   constructor(private energyDataService: EnergydataService) { }
 
   ngOnInit() {
     // Sets the variables, if they were already chosen
     this.selectedState = this.energyDataService.selectedState;
     this.selectedDevice = this.energyDataService.selectedDevice;
+    // validation, if the forecast for tomorrow is already available (after 6pm)
+    this.now = new Date().getHours();
   }
 
   handleSubmit(){
-    this.energyDataService.setGlobalVar(this.selectedState, this.selectedDevice);
-    console.log('Selected State and Device: ' + this.selectedState + ' ' + this.selectedDevice);
+    let selectedDay = 'today';
+    this.energyDataService.setGlobalVar(this.selectedState, this.selectedDevice, selectedDay);
+  }
+
+  handleSubmitTomorrow(){
+    let selectedDay = 'tomorrow';
+    this.energyDataService.setGlobalVar(this.selectedState, this.selectedDevice, selectedDay);
   }
 }

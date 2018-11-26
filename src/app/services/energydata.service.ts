@@ -14,19 +14,25 @@ export class EnergydataService {
   // Globally available variables - here: Default
   selectedDevice:string = 'Any';
   selectedState:string = 'Germany';
+  selectedDay = 'today';
 
   constructor(private http: HttpClient) {}
 
-// Get Data from entsoe-api
+// Get Data from realnewable api (fetching it from entso-e)
    getData(generationType, area){
     //  valid inputs for generationType: total-generation, solar, wind-offshore, wind-onshore
     // valid inputs for area: germany, tennet, transnet, amprion, hertz
-     return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + area);
+    if(this.selectedDay === 'today'){
+      return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + area);
+    } else if (this.selectedDay === 'tomorrow') {
+      return this.http.get(apiUrl+'/forecast/'+ generationType + '/' + this.selectedDay + '/' +  area);
+    }
    }
 
-   setGlobalVar(state, device) {
+   setGlobalVar(state, device, day) {
     this.selectedDevice = device;
     this.selectedState = state;
+    this.selectedDay = day;
    }
 
 

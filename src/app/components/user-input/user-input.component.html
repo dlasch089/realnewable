@@ -13,8 +13,11 @@
        </mat-option>
     </mat-select>
 
-     <button class="button-submit">
-        <a (click)="handleSubmit()" [routerLink]="['/results']">find perfect timing</a>
-     </button>    
+     <button class="button-submit" (click)="handleSubmit()" [routerLink]="['/results']">
+        find perfect timing
+     </button> 
+     <button class="button-submit" *ngIf="now >= 18" (click)="handleSubmitTomorrow()" [routerLink]="['/results']">
+      find tomorrow
+   </button>       
   </div>
 
