@@ -16,6 +16,7 @@ export class ResultsComponent implements OnInit {
   selectedDevice:string = 'Nothing Selected';
   selectedState:string = 'Nothing Selected';
   selectedOperator:string = 'Nothing Selected';
+  selectedDay:string = 'today';
 
   results:Result = {
     won:Object,
@@ -80,6 +81,7 @@ export class ResultsComponent implements OnInit {
   ngOnInit() {
     this.selectedDevice = this.energyDataService.selectedDevice;
     this.selectedState = this.energyDataService.selectedState;
+    this.selectedDay = this.energyDataService.selectedDay;
     
     this.calculateOptimum(this.findOperator())
     .then(results => this.getRenewableShare(results))
