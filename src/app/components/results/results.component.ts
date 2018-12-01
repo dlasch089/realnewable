@@ -25,8 +25,9 @@ export class ResultsComponent implements OnInit {
     wof:Object
   };
 
-  renewableArray:Array<Number> = [];
-  totalArray:Array<Number> = [];
+  renewableArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  totalArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  spareArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
   shareArray:Array<Number> = [];
   sortedShareArray:Array<Number>;
@@ -48,6 +49,30 @@ export class ResultsComponent implements OnInit {
     sol: 'solar',
     wof: 'wind-offshore',
     won: 'wind-onshore'
+  }
+
+  tennetShares:Object = {
+    // keys need to be strings to match the this.slectedState (space and dash is a problem)
+    'Bavaria': {
+      won: 0.11,
+      sol: 0.62,
+    },
+    'Hesse': {
+      won: 0.09,
+      sol: 0.1
+    },
+    'Lower Saxony': {
+      won: 0.49,
+      sol: 0.19
+    },
+    'Bremen': {
+      won: 0.49,
+      sol: 0.19
+    },
+    'Schleswig-Holstein': {
+      won: 0.31,
+      sol: 0.08
+    }
   }
 
   // Hourly share of pumped hydro storage in percentage; Position 0 = 0 am!
@@ -82,6 +107,8 @@ export class ResultsComponent implements OnInit {
     this.selectedDevice = this.energyDataService.selectedDevice;
     this.selectedState = this.energyDataService.selectedState;
     this.selectedDay = this.energyDataService.selectedDay;
+    this.spareArray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
     
     this.calculateOptimum(this.findOperator())
     .then(results => this.getRenewableShare(results))
@@ -121,7 +148,11 @@ export class ResultsComponent implements OnInit {
   
   // create array of summed values for renewables and the array for total generation
   getRenewableShare(object:Result) {
-  for(let key in object) {
+    // check, whether the selected state is part of the tennet area, as it needs a special seperation of the renewable energy sources
+    if(this.areaCodes.tennet.indexOf(this.selectedState) > -1){
+      this.tennetDistribution(object);
+    } else {
+      for(let key in object) {
         // validation of the data from the api
         if(object[key].documentType === 'A69' && this.renewableArray.length === 0){
           this.renewableArray = object[key].result;
@@ -135,18 +166,60 @@ export class ResultsComponent implements OnInit {
         };
       }
     }
+}
+
+// split of solar and wind as tennet is covering north and south of germany
+tennetDistribution(object:Result){
+  for(let key in object){
+        switch(key){
+          case 'sol':
+          this.renewableArray = this.renewableArray.map((num:number, idx) => {
+            let solarShare = object[key].result[idx] * this.tennetShares[this.selectedState].sol;
+            // calculates the spare energy which is not prognosed in that specific state to substract it from total generation later
+            this.spareArray[idx] = this.spareArray[idx] + (object[key].result[idx] - solarShare);
+            return num + solarShare;
+          });
+          break;
+          case 'won':
+          this.renewableArray = this.renewableArray.map((num:number, idx) => {
+            let wonShare = object[key].result[idx] * this.tennetShares[this.selectedState].won;
+            this.spareArray[idx] = this.spareArray[idx] + (object[key].result[idx] - wonShare);
+            return num + wonShare;
+          });
+          break;
+          case 'wof':
+          // only Lower Saxony is connected to the wind offshore parks in the north sea, which are maintained by TenneT; Bremen is in the middle of Lower Saxony
+          if(this.selectedState === 'Lower Saxony' || this.selectedState === 'Bremen'){
+            this.renewableArray = this.renewableArray.map((num, idx) => {
+              return num + object[key].result[idx];
+            });
+          } else {     
+            this.spareArray = this.spareArray.map((num:number, idx) => {
+              return num  + object[key].result[idx];
+            });
+          }
+          break;
+          case 'tot':
+          this.totalArray = object[key]['result'];
+          break;
+          default:
+            console.log('Sorry we did not find anything for: ', key);
+        } 
+      } 
+}
+
 
   calculateShare(renArray, totArray) {
     let otherRenewables = this.otherRenewables[this.selectedOperator].others;
     let pumpedHydroArray = this.otherRenewables[this.selectedOperator].pumpedHydro;
-    this.shareArray = totArray.map((el, idx) => {
-      // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
-      // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
-      return ((renArray[idx*4] + otherRenewables + pumpedHydroArray[idx])   / el);
-    })
-    // To-Do: Add the other renewable sources as fixed values (water: 1780, Bio: 4568, Other: 140, Pumped-Hydro: pumpedHydroShare --> hourly)
-    return this.shareArray;
+      this.shareArray = totArray.map((el, idx) => {
+        // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
+        // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
+        return ((renArray[idx*4] + otherRenewables + pumpedHydroArray[idx]) / (el - this.spareArray[idx*4]));
+      })
+      return this.shareArray;
   }
+
 
   // Sorting the array of shares (first element: highest share)
   sortShares(shaArray) {
