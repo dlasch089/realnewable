@@ -12,9 +12,8 @@
 
 .button-back {
   color:black;
-  background-color: #43e4bc;
-  border-width: 1px;
-  border-color: #43e4bc;
+  background-color: #00b18c;
+  border: 2px solid #00b18c;
   margin-top: 10%;
   padding: 2%;
 }
