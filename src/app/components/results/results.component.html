@@ -1,6 +1,6 @@
 <div class="container">
   <h2>
-    Perfect time for energy consumption in {{selectedState}} {{selectedDay}} is: 
+    Perfect time for energy consumption in <span>{{selectedState}} {{selectedDay}}</span> is: 
   </h2>
   <img *ngIf="!optimumToday" src="assets/solar battery-0.9s-200px.svg" />
   <h2 *ngIf="optimumToday" class="optimum">
@@ -23,7 +23,7 @@
         is:  {{share*100 | number:'1.0-0'}}%
       </p>
     </mat-expansion-panel>
-    <button [routerLink]="['/']" class="button-back">Go Back</button>
+    <button [routerLink]="['/']" class="button-back">go back</button>
 </div>
 
 

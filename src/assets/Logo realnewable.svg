@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="150px" height="65px" viewBox="0 0 150 65" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.4 (67378) - http://www.bohemiancoding.com/sketch -->
+    <title>Logo realnewable</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Logo-DL" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Logo-realnewable" transform="translate(-127.000000, -67.000000)">
+            <polygon id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" points="122.330267 65.8134353 279.495071 65.8134353 279.521052 134.289474 122.356249 134.289474"></polygon>
+            <path d="M237.742105,109.420362 C237.742105,122.056809 227.27592,132.3 214.365789,132.3 C201.455659,132.3 190.989474,122.056809 190.989474,109.420362 C190.989474,96.7852964 201.455659,86.5421053 214.365789,86.5421053 C227.27592,86.5421053 237.742105,96.7852964 237.742105,109.420362 Z" id="Stroke-1" stroke="#43E4BC" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M239.731579,86.5421053 L246.694737,79.5789474" id="Stroke-15" stroke="#43E4BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M180.047368,80.5736842 L187.010526,87.5368421" id="Stroke-21" stroke="#43E4BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M213.371053,69.6315789 L213.371053,76.5947368" id="Stroke-25" stroke="#43E4BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M177.063158,105.939474 L170.1,105.939474" id="Stroke-27" stroke="#43E4BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <path d="M256.642105,105.939474 L249.678947,105.939474" id="Stroke-29" stroke="#43E4BC" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+            <rect id="Rectangle" fill="#FFFFFF" fill-rule="nonzero" x="123.347368" y="107.431579" width="160.152632" height="26.568421"></rect>
+            <text id="realnewable" font-family="IBMPlexMono-SemiBold, IBM Plex Mono" font-size="26" font-weight="500" letter-spacing="-2.25999999" fill="#313131">
+                <tspan x="128.321053" y="128.373684">realnewabl</tspan>
+                <tspan x="261.721053" y="128.373684">e</tspan>
+            </text>
+        </g>
+    </g>
+</svg>
