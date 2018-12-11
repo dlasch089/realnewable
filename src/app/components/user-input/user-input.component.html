@@ -15,12 +15,13 @@
          {{device}}
        </mat-option>
     </mat-select>
-
-     <button class="button-submit" (click)="handleSubmit()" [routerLink]="['/results']">
-        find perfect timing
-     </button> 
-     <button class="button-submit" *ngIf="now >= 18" (click)="handleSubmitTomorrow()" [routerLink]="['/results']">
-      find tomorrow
-   </button>       
+    <div class="button-container">
+      <button class="button-submit" (click)="handleSubmit()" [routerLink]="['/results']">
+         find optimum today
+      </button> 
+      <button class="button-submit" *ngIf="now >= 18" (click)="handleSubmitTomorrow()" [routerLink]="['/results']">
+       find it tomorrow
+      </button>       
+    </div>
   </div>
 

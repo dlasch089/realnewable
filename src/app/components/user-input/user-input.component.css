@@ -8,7 +8,7 @@
   color: white;
   background-color: #00b18c;
   border-width: 1px;
-  margin-top: 10%;
+  margin-top: 5%;
   padding: 2%;
   width: 50%;
   border: 2px solid #00b18c;
@@ -18,5 +18,11 @@
 
 a {
   text-decoration: none;
+}
+
+.button-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
