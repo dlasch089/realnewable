@@ -4,12 +4,12 @@
   </h2>
 </div>
   <div class="optimum-container">
-      <img *ngIf="!optimumToday" src="assets/solar battery-0.9s-200px.svg" />
-      <div *ngIf="optimumToday" >
-        <h2 *ngIf="optimumToday <= 12">{{optimumToday}} am</h2>
-        <h2 *ngIf="optimumToday > 12">{{optimumToday - 12}} pm</h2>
+      <img *ngIf="!optimum" src="assets/solar battery-0.9s-200px.svg" />
+      <div *ngIf="optimum" >
+        <h2 *ngIf="optimum <= 12">{{optimum}} am</h2>
+        <h2 *ngIf="optimum > 12">{{optimum - 12}} pm</h2>
       </div>
-      <p *ngIf="optimumToday">With {{shareArray[optimumToday]*100 | number:'1.0-0' }}% of renewable energy sources</p>
+      <p *ngIf="optimum">With {{shareArray[optimum]*100 | number:'1.0-0' }}% of renewable energy sources</p>
     </div>
     <div class="footer">
       <mat-expansion-panel *ngIf="rankedShares.length > 0">

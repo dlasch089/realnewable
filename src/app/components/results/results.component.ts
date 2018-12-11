@@ -34,7 +34,7 @@ export class ResultsComponent implements OnInit {
   rankedShares:Array<Number> = [];
 
   optimalTime:Number;
-  optimumToday:Number;
+  optimum:Number;
   
   areaCodes = {
     germany: ['Germany'],
@@ -237,10 +237,17 @@ tennetDistribution(object:Result){
   // Find the optimum for today, after now
   findOptimumToday(rankedSharesArray){
     let now = new Date().getHours();
-    // Finds the first element bigger than the current hour
-    this.optimumToday = rankedSharesArray.find(el => {
+    console.log(this.rankedShares);
+    if(this.selectedDay === 'today'){
+      // Finds the first element bigger than the current hour
+      this.optimum = rankedSharesArray.find(el => {
         return el >= now; 
-    })
+      })
+    }
+    else{
+      this.optimum = rankedSharesArray[0];
+    }
+
   }   
           /*
           ONLY NEEDED FOR SMARD-FETCH
