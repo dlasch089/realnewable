@@ -34,7 +34,7 @@ export class ResultsComponent implements OnInit {
   rankedShares:Array<Number> = [];
 
   optimalTime:Number;
-  optimum:Number;
+  optimum:any = null;
   
   areaCodes = {
     germany: ['Germany'],
@@ -245,6 +245,7 @@ tennetDistribution(object:Result){
   // Find the optimum for today, after now
   findOptimumToday(rankedSharesArray){
     let now = new Date().getHours();
+    console.log(rankedSharesArray);
     if(this.selectedDay === 'today'){
       // Finds the first element bigger than the current hour
       this.optimum = rankedSharesArray.find(el => {
@@ -252,7 +253,7 @@ tennetDistribution(object:Result){
       })
     }
     else{
-      this.optimum = rankedSharesArray[0];
+      return this.optimum = rankedSharesArray[0];
     }
 
   }   
