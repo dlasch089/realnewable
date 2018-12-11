@@ -171,6 +171,7 @@ export class ResultsComponent implements OnInit {
 // split of solar and wind as tennet is covering north and south of germany
 tennetDistribution(object:Result){
   for(let key in object){
+      console.log(this.spareArray);
         switch(key){
           case 'sol':
           this.renewableArray = this.renewableArray.map((num:number, idx) => {
@@ -212,11 +213,18 @@ tennetDistribution(object:Result){
   calculateShare(renArray, totArray) {
     let otherRenewables = this.otherRenewables[this.selectedOperator].others;
     let pumpedHydroArray = this.otherRenewables[this.selectedOperator].pumpedHydro;
+    if(this.selectedOperator != 'tennet'){
       this.shareArray = totArray.map((el, idx) => {
         // every 4th element, as the resolution of the renewable data is quarterhours --> renArray.length === 96
         // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
-        return ((renArray[idx*4] + otherRenewables + pumpedHydroArray[idx]) / (el - this.spareArray[idx*4]));
+        return ((renArray[idx*4] + otherRenewables + pumpedHydroArray[idx]) / el);
       })
+    }else if(this.selectedOperator === 'tennet'){
+      this.shareArray = totArray.map((el, idx) => {
+        // Adding only the share of other renewables of the total generation: 1 - (this.spareArray[idx*4]/el)
+        return ((renArray[idx*4] + (otherRenewables + pumpedHydroArray[idx]) * (1 - (renArray[idx*4]/el)) ) / (el - renArray[idx*4]));
+      })
+    }
       return this.shareArray;
   }
 
@@ -237,7 +245,6 @@ tennetDistribution(object:Result){
   // Find the optimum for today, after now
   findOptimumToday(rankedSharesArray){
     let now = new Date().getHours();
-    console.log(this.rankedShares);
     if(this.selectedDay === 'today'){
       // Finds the first element bigger than the current hour
       this.optimum = rankedSharesArray.find(el => {
