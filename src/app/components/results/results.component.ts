@@ -27,7 +27,6 @@ export class ResultsComponent implements OnInit {
 
   renewableArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
   totalArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-  spareArray:Array<number> = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
   shareArray:Array<Number> = [];
   sortedShareArray:Array<Number>;
@@ -53,25 +52,31 @@ export class ResultsComponent implements OnInit {
 
   tennetShares:Object = {
     // keys need to be strings to match the this.slectedState (space and dash is a problem)
+    // Bremen and Lower Saxony have the same values, as Bremen is inside of Lower Saxony, but does not produce renewable energy itself
     'Bavaria': {
       won: 0.11,
       sol: 0.62,
+      tot: 0.41
     },
     'Hesse': {
       won: 0.09,
-      sol: 0.1
+      sol: 0.1,
+      tot: 0.1
     },
     'Lower Saxony': {
       won: 0.49,
-      sol: 0.19
+      sol: 0.19,
+      tot: 0.27
     },
     'Bremen': {
       won: 0.49,
-      sol: 0.19
+      sol: 0.19,
+      tot: 0.27
     },
     'Schleswig-Holstein': {
       won: 0.31,
-      sol: 0.08
+      sol: 0.08,
+      tot: 0.1
     }
   }
 
@@ -107,8 +112,6 @@ export class ResultsComponent implements OnInit {
     this.selectedDevice = this.energyDataService.selectedDevice;
     this.selectedState = this.energyDataService.selectedState;
     this.selectedDay = this.energyDataService.selectedDay;
-    this.spareArray = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-
     
     this.calculateOptimum(this.findOperator())
     .then(results => this.getRenewableShare(results))
@@ -171,20 +174,16 @@ export class ResultsComponent implements OnInit {
 // split of solar and wind as tennet is covering north and south of germany
 tennetDistribution(object:Result){
   for(let key in object){
-      console.log(this.spareArray);
         switch(key){
           case 'sol':
           this.renewableArray = this.renewableArray.map((num:number, idx) => {
             let solarShare = object[key].result[idx] * this.tennetShares[this.selectedState].sol;
-            // calculates the spare energy which is not prognosed in that specific state to substract it from total generation later
-            this.spareArray[idx] = this.spareArray[idx] + (object[key].result[idx] - solarShare);
             return num + solarShare;
           });
           break;
           case 'won':
           this.renewableArray = this.renewableArray.map((num:number, idx) => {
             let wonShare = object[key].result[idx] * this.tennetShares[this.selectedState].won;
-            this.spareArray[idx] = this.spareArray[idx] + (object[key].result[idx] - wonShare);
             return num + wonShare;
           });
           break;
@@ -193,10 +192,6 @@ tennetDistribution(object:Result){
           if(this.selectedState === 'Lower Saxony' || this.selectedState === 'Bremen'){
             this.renewableArray = this.renewableArray.map((num, idx) => {
               return num + object[key].result[idx];
-            });
-          } else {     
-            this.spareArray = this.spareArray.map((num:number, idx) => {
-              return num  + object[key].result[idx];
             });
           }
           break;
@@ -219,12 +214,14 @@ tennetDistribution(object:Result){
         // PumpedHydroShare is added, as average percentile over the last two years; OtherRenewables are added as fixed values (minimal deviation from average); source: "2018-10-25 Generated Power Analysis" --> (c) Bundesnetzagentur | SMARD.de
         return ((renArray[idx*4] + otherRenewables + pumpedHydroArray[idx]) / el);
       })
-    }else if(this.selectedOperator === 'tennet'){
+    } else if(this.selectedOperator === 'tennet'){
+      console.log(this.tennetShares[this.selectedState].tot);
       this.shareArray = totArray.map((el, idx) => {
         // Adding only the share of other renewables of the total generation: 1 - (this.spareArray[idx*4]/el)
-        return ((renArray[idx*4] + (otherRenewables + pumpedHydroArray[idx]) * (1 - (renArray[idx*4]/el)) ) / (el - renArray[idx*4]));
+        return ((renArray[idx*4] + ((otherRenewables + pumpedHydroArray[idx]) * this.tennetShares[this.selectedState].tot) ) / (el * this.tennetShares[this.selectedState].tot));
       })
     }
+    console.log('Renewable Array: ', renArray, 'Total Array: ', totArray, 'Share Array: ', this.shareArray);
       return this.shareArray;
   }
 
@@ -245,7 +242,6 @@ tennetDistribution(object:Result){
   // Find the optimum for today, after now
   findOptimumToday(rankedSharesArray){
     let now = new Date().getHours();
-    console.log(rankedSharesArray);
     if(this.selectedDay === 'today'){
       // Finds the first element bigger than the current hour
       this.optimum = rankedSharesArray.find(el => {
