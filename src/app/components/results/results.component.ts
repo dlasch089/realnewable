@@ -50,33 +50,64 @@ export class ResultsComponent implements OnInit {
     won: 'wind-onshore'
   }
 
+  // tennetShares:Object = {
+  //   // keys need to be strings to match the this.slectedState (space and dash is a problem)
+  //   // Bremen and Lower Saxony have the same values, as Bremen is inside of Lower Saxony, but does not produce renewable energy itself
+  //   'Bavaria': {
+  //     won: 0.11,
+  //     sol: 0.62,
+  //     tot: 0.41
+  //   },
+  //   'Hesse': {
+  //     won: 0.09,
+  //     sol: 0.1,
+  //     tot: 0.23
+  //   },
+  //   'Lower Saxony': {
+  //     won: 0.49,
+  //     sol: 0.19,
+  //     tot: 0.27
+  //   },
+  //   'Bremen': {
+  //     won: 0.49,
+  //     sol: 0.19,
+  //     tot: 0.27
+  //   },
+  //   'Schleswig-Holstein': {
+  //     won: 0.31,
+  //     sol: 0.08,
+  //     tot: 0.1
+  //   }
+  // }
+
   tennetShares:Object = {
     // keys need to be strings to match the this.slectedState (space and dash is a problem)
-    // Bremen and Lower Saxony have the same values, as Bremen is inside of Lower Saxony, but does not produce renewable energy itself
+    // Hesse, lower saxony, bremen and schleswig-holstein are summarized to "Tennet North"
+    // reference-files: 2018-11-29 Wind Onshore Erzeugung nach Bundesländern, 2018-12-13 Endenergieverbrauch nach Ländern, 2018-11-20 Solar Erzeugung nach Bundesländern
     'Bavaria': {
       won: 0.11,
       sol: 0.62,
       tot: 0.41
     },
     'Hesse': {
-      won: 0.09,
-      sol: 0.1,
-      tot: 0.1
+      won: 0.89,
+      sol: 0.38,
+      tot: 0.59
     },
     'Lower Saxony': {
-      won: 0.49,
-      sol: 0.19,
-      tot: 0.27
+      won: 0.89,
+      sol: 0.38,
+      tot: 0.59
     },
     'Bremen': {
-      won: 0.49,
-      sol: 0.19,
-      tot: 0.27
+      won: 0.89,
+      sol: 0.38,
+      tot: 0.59
     },
     'Schleswig-Holstein': {
-      won: 0.31,
-      sol: 0.08,
-      tot: 0.1
+      won: 0.89,
+      sol: 0.38,
+      tot: 0.59
     }
   }
 
@@ -189,7 +220,7 @@ tennetDistribution(object:Result){
           break;
           case 'wof':
           // only Lower Saxony is connected to the wind offshore parks in the north sea, which are maintained by TenneT; Bremen is in the middle of Lower Saxony
-          if(this.selectedState === 'Lower Saxony' || this.selectedState === 'Bremen'){
+          if(this.selectedState != 'Bavaria'){
             this.renewableArray = this.renewableArray.map((num, idx) => {
               return num + object[key].result[idx];
             });
