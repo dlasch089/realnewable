@@ -18,7 +18,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ## Development server
 
-1. Fork the git and `cd /tum-realnewable`
+1. Fork the git and `cd /realnewable`
 2. Run `npm install`
 3. Run `ng serve --aot` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
