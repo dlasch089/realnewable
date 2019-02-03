@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -35,6 +35,13 @@ const routes: Routes = [
     BrowserAnimationsModule,
     MatSelectModule,
     MatExpansionModule
+  ],
+  exports: [
+    MatExpansionModule,
+    MatSelectModule
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA
   ],
   providers: [],
   bootstrap: [AppComponent]
